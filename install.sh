@@ -14,88 +14,86 @@ git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
 ## Pacman
 pacman_packages=(
     alacritty
+    curl
+    decibels
+    evince
     fastfetch
+    ffmpegthumbnailer 
+    git
+    gnome-calculator
     grim
+    htop
     imagemagick
+    loupe
+    ly
+    noto-fonts
     noto-fonts-emoji
+    nvim
     otf-font-awesome
     playerctl
-    rofimoji
     rofi-wayland
+    rofimoji
     slurp
-    thunar 
-    htop
-    thunar-volman 
-    tumbler
-    ffmpegthumbnailer 
-    thunar-archive-plugin
-    xarchiver
-    wf-recorder
-    noto-fonts
-    wlsunset
-    git
-    nvim
-    wget
-    curl
     starship
+    stow
     sway
-    swaybg
-    ly
     swayidle
     swaylock
     swaync
+    swww
+    thunar 
+    thunar-archive-plugin
+    thunar-volman 
+    totem
     ttf-jetbrains-mono
     ttf-jetbrains-mono-nerd
-    waybar
-    wl-clipboard
-    zsh
-    stow
-    gnome-calculator
-    gnome-decibels
-    loupe
-    evince
-    totem
-    zip
+    tumbler
     unzip
+    waybar
+    wf-recorder
+    wget
+    wlsunset
+    xarchiver
+    xclip
+    zip
+    zsh
 )
 
-sudo pacman -S --needed --noconfirm "${pacman_packages[@]}"
+sudo pacman -Sy --needed --noconfirm "${pacman_packages[@]}"
 
 ## AUR
 aur_packages=(
-    wttrbar
+    clipton-git
     google-chrome
     matugen-bin
+    wallust
+    wttrbar
 )
 
-yay -S --needed --noconfirm "${aur_packages[@]}"
+yay -Sy --needed --noconfirm "${aur_packages[@]}"
 
 # Set up dotfiles
+mkdir -p ~/.config
 cd ~
-git clone --depth=1 https://github.com/aceydot/minimal-sway
 git clone --depth=1 https://github.com/aceydot/material-sway
+git clone --depth=1 https://github.com/aceydot/minimal-sway
 cd material-sway
+chmod +x .config/rofi/scripts/*.sh
 stow .
+cd ~
+cd minimal-sway
+chmod +x .config/rofi/scripts/*.sh
 
 # Set zsh
-ZSHRC="$HOME/.zshrc"
-touch "$ZSHRC"
-
 chsh -s /usr/bin/zsh
-## History
-if ! grep -q 'HISTSIZE' "$ZSHRC"; then
-  cat >> "$ZSHRC" <<'EOF'
 
-HISTSIZE=100000
-SAVEHIST=100000
-setopt inc_append_history
-setopt share_history
-EOF
-fi
-## Set starship
-if ! grep -qxF 'eval "$(starship init zsh)"' "$ZSHRC"; then
-  printf '\n%s\n' 'eval "$(starship init zsh)"' >> "$ZSHRC"
-fi
+# Set up git
+git config --global user.email "aceydot@tuta.io"
+git config --global user.name "aceydot"
+git config --global credential.helper "cache --timeout=3600"
+
+# Set up clipboard
+systemctl --user enable --now clipton
 
 # Enable ly
-sudo systemctl enable ly.service
+sudo systemctl enable ly
