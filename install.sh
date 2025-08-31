@@ -3,6 +3,9 @@
 # Update system
 sudo pacman -Syu --noconfirm
 
+# Install git
+sudo pacman -S --noconfirm git
+
 # Install yay
 git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
   cd /tmp/yay-bin
