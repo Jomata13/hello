@@ -66,7 +66,6 @@ aur_packages=(
     wttrbar
     google-chrome
     matugen-bin
-    wallust
 )
 
 yay -S --needed --noconfirm "${aur_packages[@]}"
